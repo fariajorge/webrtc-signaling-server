@@ -1,8 +1,4 @@
 import { WebSocketServer } from 'ws';
-import fetch from 'node-fetch';
-
-// URL for fetching server configuration
-const CONFIG_URL = 'https://pastebin.com/raw/Hg7wb80z';
 
 // Map to store connected clients
 const sockets = new Map(); // Stores clients with unique IDs
@@ -21,17 +17,12 @@ function createMessage(type, content) {
 // Function to initialize the WebSocket server
 async function initializeServer() {
     try {
-        // Fetch server configuration from Pastebin
-        const response = await fetch(CONFIG_URL);
-        const config = await response.json();
+       // Extract IP and port from the configuration
+        const serverPort = process.env.PORT || 4000;
 
-        // Extract IP and port from the configuration
-        const serverIp = config.server.ip;
-        const serverPort = process.env.PORT || config.server.port;
-
-        // Create and start the WebSocket server
-        const wss = new WebSocketServer({ host: serverIp, port: serverPort });
-        console.log(`WebRTC: WebSocket server started on ws://${serverIp}:${serverPort}/Signaling`);
+        /// Create and start the WebSocket server
+        const wss = new WebSocketServer({ port: serverPort });
+        console.log(`WebSocket server started on port ${serverPort}/Signaling`);
 
         // Handle incoming connections
         wss.on('connection', (socket) => {
