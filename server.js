@@ -27,7 +27,7 @@ async function initializeServer() {
 
         // Extract IP and port from the configuration
         const serverIp = config.server.ip;
-        const serverPort = config.server.port;
+        const serverPort = process.env.PORT || config.server.port;
 
         // Create and start the WebSocket server
         const wss = new WebSocketServer({ host: serverIp, port: serverPort });
